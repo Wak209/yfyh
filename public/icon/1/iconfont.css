@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "fontfamily"; /* Project id 3967255 */
+  src: url('iconfont.svg?t=1679392683162#fontfamily') format('svg');
+}
+
+.fontfamily {
+  font-family: "fontfamily" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-mtchizi_o:before {
+  content: "\eb48";
+}
+
+.el-icon-mtjishu:before {
+  content: "\eb4f";
+}
+
+.el-icon-mtrubber:before {
+  content: "\ea15";
+}
+
+
+[class^="el-icon-ump"], [class*=" el-icon-ump"] {
+  font-family:"fontFamily" !important;
+  /* 以下内容参照第三方图标库本身的规则 */
+  font-size: 18px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,30 @@
+{
+  "id": "3967255",
+  "name": "mt",
+  "font_family": "fontfamily",
+  "css_prefix_text": "el-icon-mt",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5387749",
+      "name": "尺子_o",
+      "font_class": "chizi_o",
+      "unicode": "eb48",
+      "unicode_decimal": 60232
+    },
+    {
+      "icon_id": "7841521",
+      "name": "计数",
+      "font_class": "jishu",
+      "unicode": "eb4f",
+      "unicode_decimal": 60239
+    },
+    {
+      "icon_id": "18171135",
+      "name": "橡皮,擦除,橡皮擦",
+      "font_class": "rubber",
+      "unicode": "ea15",
+      "unicode_decimal": 59925
+    }
+  ]
+}
