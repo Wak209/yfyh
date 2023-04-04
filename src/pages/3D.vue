@@ -13,21 +13,22 @@
                 class="el-menu-vertical-demo"
                 @open="handleOpen"
                 @close="handleClose"
+                text-color="#fdfdfd"
                 >
                 <el-menu-item index="1" @click="clicknav(1)" name ='tab0'>
-                  <span>Navigator One</span>
+                  <span style="color:white">1.上传文件</span>
                 </el-menu-item>
                 
                 <el-menu-item index="2" @click="clicknav(2)" name ='tab1'>
-                  <span>  Navigator two </span>
+                  <span style="color:white">2.预测</span>
                 </el-menu-item>
 
                 <el-menu-item index="3" @click="clicknav(3)" name ='tab2'>
-                  <span>Navigator Three</span>
+                  <span style="color:white">3.视图</span>
                 </el-menu-item>
 
                 <el-menu-item index="4" @click="clicknav(4)" name ='tab3'>
-                 <span>Navigator Four</span>
+                <span style="color:white">4.分析</span>
 
                 </el-menu-item>
                 </el-menu>
@@ -35,14 +36,12 @@
           
           
               <el-main >
-             
                 <p><span  style="font-size:xx-large;  font-weight:bold ; color: cornflowerblue;" id ="one" class="section">1.上传文件&nbsp&nbsp&nbsp</span><span style="font-size:large;  font-weight:bold;color: cornflowerblue;" >(支持格式：nii、nii.gz、dcm、raw、mhd等)</span></p>
 
                 <div class="Conv">
                     <canvas id="gl"></canvas>
                 </div>
                 <!--ViewBefore></ViewBefore-->
-
                 <div class="upload">
                 <div class="uploadbox">
                 <el-upload
@@ -51,7 +50,8 @@
                     :multiple="false"
                     :limit="1"
                     :auto-upload="false"
-                    action="none"
+                    :on-change="handleChange"
+                    :action="none"
                 >
                     <el-icon class="el-icon--upload"><Plus /></el-icon>
                     <div class="el-upload__text">拖拽文件或者<em>点击上传</em></div>
@@ -59,26 +59,35 @@
                     <el-button
                     class="button1"
                     type="primary"
-                    @click="HandleSubmit()"
+                    @click="HandleShow()"
                     style="text-align:center"
                     >
-                    确认上传
+                    展示
                     </el-button>
+                    
                 </div>
                 </div>
                 <!--ViewBefore></ViewBefore-->
                 <!--ViewThreed></ViewThreed-->
-
+                <el-button
+                    class="button11"
+                    type="primary"
+                    @click="HandleSubmit()"
+                    style="    display: flex; justify-content: center;"
+                    round
+                    >
+                    确认上传
+                    </el-button>
 
                 <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"  id ="two" class="section">2.预测</span></p>
                 <br><br>
                 <div class = "con">
-                <el-switch
+                <!--el-switch
                   v-model="value1"
                   class="switch1"
                   @change="switchChange"
                   active-text="高精度"
-                  inactive-text="正常"/>
+                  inactive-text="正常"/-->
                 <el-tooltip content="单个模型预测，预计3-5分钟" placement="bottom" effect="light">
                     <el-button class="button2" type="primary"  :loading="ConfirmLoadinglow" @click ="ConfirmLow" round>预测</el-button>
                 </el-tooltip>
@@ -87,20 +96,17 @@
                 </el-tooltip--></div>
                 <!--ViewThreedafter></ViewThreedafter-->
                 <ViewThreed></ViewThreed>
-                <el-button  color="#626aef" type="primary"   round class="download-button" @click="testt">导出</el-button> 
+                <el-button  color="#626aef" type="primary"   round class="download-button" @click="download">导出</el-button> 
 
 
 
                 <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"  id ="three" class="section">3.视图</span></p>
                 <br><br>
                 <tool></tool>
+                <br><br>
 
                 <span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"   id ="four" class="section">4.分析</span>
-
-
-
-
-              
+                <analysis></analysis>
               </el-main>
         </el-container>
         </el-container>
@@ -121,6 +127,10 @@ import  ViewThreedafter from "../3D/view3Dafter.vue"
 import  ViewBefore from "../3D/viewbefore.vue"
 import {Niivue} from '@niivue/niivue'
 import tool from '../3D/3Dtool.vue'
+import axios from 'axios'
+import analysis from '../3D/analysis.vue'
+import { saveAs } from 'file-saver';
+
 
 const nv = new Niivue()
 
@@ -132,21 +142,26 @@ const { handlePreView } = Aside;
 const { getVolumesFile, AddVolumesFile, RemoveVolumesFile } = Tool;
 const activeIndex2 = ref('1')
 
-
+var List =[
+        {
+          url: "/basic/before.nii.gz",
+        },
+      ]
 export default{
   data(){
     return {
+      fileList: [],
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			},
+      fileUrl: '',
       activeName:'tab1',
       scroll:'',
       istyle:-1,
       active:"1",
       ConfirmLoadinglow:false,
       ConfirmLoadinghigh:false,
-      volumeList: [
-        {
-          url: "/before.nii.gz",
-        },
-      ]
+      volumeList:List
     }
   },
   components:{
@@ -156,6 +171,7 @@ export default{
     ViewThreedafter,
     ViewBefore,
     tool,
+    analysis
   },
 
   mounted(){
@@ -163,6 +179,9 @@ export default{
     nv.attachTo('gl');
     nv.loadVolumes(this.volumeList);
   },
+  
+
+
   destroy() {
     // 必须移除监听器，不然当该vue组件被销毁了，监听器还在就会出错
     window.removeEventListener('scroll', this.onScroll)
@@ -171,8 +190,11 @@ export default{
     dataScroll: function () {
         this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
       },
-    HandleSubmit() {
-      const Volumes = getVolumesFile();
+    handleChange(file, fileList) { //文件数量改变
+			this.fileList = fileList;
+		},
+    HandleShow() {
+      /*const Volumes = getVolumesFile();
       //console.log(Volumes)
       //console.log(lastPos.str)
       if (Volumes.value.length) {
@@ -182,9 +204,51 @@ export default{
       } else {
         //this.$router.push("/three/preview");
         handlePreView();
-      }
-    },
+      }*/
+      var param = new FormData();
+					this.fileList.forEach(
+						(val, index) => {
+							param.append("file", val.raw);
+						}
+					);
 
+					axios.post("http://127.0.0.1:5000/upload", param).then(responce => {
+            console.log(responce)
+            if(responce.data === 'File saved successfully!')
+            {
+              console.log(this.volumeList)
+              this.volumeList = [{url: "/now.nii.gz",}]
+              window.addEventListener('scroll', this.dataScroll);
+              nv.attachTo('gl');
+              nv.loadVolumes(this.volumeList);
+            }
+          });
+          /*
+					this.$message({
+						message: "上传成功！",
+						duration: 1000
+					});*/
+    },
+    HandleSubmit(){
+      var param = new FormData();
+					this.fileList.forEach(
+						(val, index) => {
+							param.append("file", val.raw);
+						}
+					);
+
+					axios.post("http://127.0.0.1:5000/upload", param).then(responce => {
+            console.log(responce)
+            if(responce.data === 'File saved successfully!')
+            {
+              console.log(this.volumeList)
+              this.volumeList = [{url: "/now.nii.gz",}]
+              window.addEventListener('scroll', this.dataScroll);
+              nv.attachTo('gl');
+              nv.loadVolumes(this.volumeList);
+            }
+          });
+    },
     ConfirmLow(){
       this.ConfirmLoadinglow=true;
     },
@@ -226,6 +290,13 @@ export default{
           }
         }
       },
+      async download() {
+      this.fileUrl="/basic/before.nii.gz"
+      const response = await axios.get(`http://127.0.0.1:5000/download?file_url=${this.fileUrl}`, {
+        responseType: 'blob'
+      })
+      saveAs(response.data, 'download.nii.gz')
+    }
   },
   watch: {
     //监听scroll变量，只要滚动条位置变化就会执行方法loadScroll
@@ -245,22 +316,26 @@ export default{
   width: 70 vw;
 }
 .el-aside{
-  width: 10vw;
-  height: 100%;
+  width: 12vw;
+  height: 100vh;
+  background-color: rgb(51, 52, 53);
+
   position: fixed;
 }
 .el-main{
   .el-menu-item {
-    background-color: rgba(255, 255, 255, 1);
+    --text-color:#fdfdfd;
+    background-color: rgb(51, 52, 53);
   }
   .el-menu-item.is-active {
-    background-color: #40e669 !important;
+    --text-color:#fdfdfd;
+    background-color: #3f92e0 !important;
   }
   width: 88vw;
   height: 100%;
 
   position: relative;
-  left:10vw;
+  left:12vw;
 
   .upload {
     height: 45vh;
@@ -313,6 +388,9 @@ export default{
       }
     }
   }
+  .button11{
+    transform: translate(38vw,0);
+  }
   .switch1{
         transform: translate(15vw,0vh);
   }
@@ -324,7 +402,7 @@ export default{
     height: 5vh;
     width: 80vw;
     .button2{
-      transform: translate(20vw,0vh);
+      transform: translate(39vw,0vh);
     }
     .button3{
       transform: translate(40vw,0vh);
@@ -333,7 +411,7 @@ export default{
 
   .demo-tabs > .el-tabs__content {
     padding: 32px;
-    color: #6b778c;
+    color: #8c6d6b;
     font-size: 32px;
     font-weight: 600;
   }

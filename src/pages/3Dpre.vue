@@ -1,133 +1,114 @@
 <template>
   <div class="common-layout">
-    <el-container>
+      <el-container class="Tou " style="overflow:hidden" >
       <el-header><NaV></NaV></el-header>
-    <el-container>
-
-    <el-main style="overflow:hidden" id="rightsrcoll">
-      <el-row class="tac" :gutter="50" >
-        <el-col :span="4" class="rightt">
-
-        <div class="Right">
-        <br>
-        <h1 class="mb-2" style="color: cornflowerblue; font-size: large;">3D Segmentation</h1>
-        <br>
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-
-          style="height: 100%"
-        >
-          <el-menu-item index="1">
-            <span>Navigator One</span>
-          </el-menu-item>
-          <el-menu-item index="2">
-            <span>Navigator Two</span>
-          </el-menu-item>
-          <el-menu-item index="3" >
-            <span>Navigator Three</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <span>Navigator Four</span>
-          </el-menu-item>
-        </el-menu>
-        </div>
-        </el-col>
-          <el-col :span="20">
-            <p><span  style="font-size:xx-large;  font-weight:bold ; color: cornflowerblue;" >1.上传文件&nbsp&nbsp&nbsp</span><span style="font-size:large;  font-weight:bold;color: cornflowerblue;" >(支持格式：nii、nii.gz、dcm、raw、mhd等)</span></p>
-            <div class="upload">
-            <div class="uploadbox">
-              <el-upload
-                class="upload-demo"
-                drag
-                :multiple="false"
-                :limit="1"
-                :auto-upload="false"
-                action="none"
+      <el-container >
+        
+          <el-aside >
+              <br>
+              <h1 class="mb-2" style="color: cornflowerblue; font-size: large;">3D Segmentation</h1>
+              <br>
+              <el-menu
+              :default-active="active"
+              class="el-menu-vertical-demo"
+              @open="handleOpen"
+              @close="handleClose"
+              text-color="#fdfdfd"
               >
-                <el-icon class="el-icon--upload"><Plus /></el-icon>
-                <div class="el-upload__text">拖拽文件或者<em>点击上传</em></div>
+              <el-menu-item index="1" @click="clicknav(1)" name ='tab0'>
+                <span style="color:white">1.上传文件</span>
+              </el-menu-item>
+              
+              <el-menu-item index="2" @click="clicknav(2)" name ='tab1'>
+                <span style="color:white">2.预测</span>
+              </el-menu-item>
+
+              <el-menu-item index="3" @click="clicknav(3)" name ='tab2'>
+                <span style="color:white">3.视图</span>
+              </el-menu-item>
+
+              <el-menu-item index="4" @click="clicknav(4)" name ='tab3'>
+               <span style="color:white">4.分析</span>
+
+              </el-menu-item>
+              </el-menu>
+          </el-aside>
+        
+        
+            <el-main >
+           
+              <p><span  style="font-size:xx-large;  font-weight:bold ; color: cornflowerblue;" id ="one" class="section">1.上传文件&nbsp&nbsp&nbsp</span><span style="font-size:large;  font-weight:bold;color: cornflowerblue;" >(支持格式：nii、nii.gz、dcm、raw、mhd等)</span></p>
+
+              <div class="Conv">
+                  <canvas id="gl"></canvas>
+              </div>
+              <!--ViewBefore></ViewBefore-->
+
+              <div class="upload">
+              <div class="uploadbox">
+              <el-upload
+                  class="upload-demo"
+                  drag
+                  :multiple="false"
+                  :limit="1"
+                  :auto-upload="false"
+                  
+                  :action="none"
+              >
+                  <el-icon class="el-icon--upload"><Plus /></el-icon>
+                  <div class="el-upload__text">拖拽文件或者<em>点击上传</em></div>
               </el-upload>
-                <el-button
+                  <el-button
                   class="button1"
                   type="primary"
                   @click="HandleSubmit()"
                   style="text-align:center"
-                >
+                  
+                  >
                   确认上传
-                </el-button>
-            </div>
-          </div>
-          <ViewBefore></ViewBefore>
-          <!--ViewThreed></ViewThreed-->
+                  </el-button>
+              </div>
+              </div>
+              <!--ViewBefore></ViewBefore-->
+              <!--ViewThreed></ViewThreed-->
 
 
-          <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;" >2.预测</span></p>
-          <br><br>
-          <div class = "con">
-          <el-tooltip content="单个模型预测，预计3-5分钟" placement="bottom" effect="light">
-            <el-button class="button2" type="primary"  :loading="ConfirmLoadinglow" @click ="ConfirmLow" round>预测</el-button>
-          </el-tooltip>
-          <el-tooltip content="采用5个模型融合预测，预计20-30分钟" placement="bottom" effect="light">
-            <el-button  color="#626aef"  class="button3" type="primary"  :loading="ConfirmLoadinghigh" @click ="ConfirmHigh" round >高精度预测</el-button>
-          </el-tooltip></div>
-          <!--ViewThreedafter></ViewThreedafter-->
-          <ViewThreed></ViewThreed>
-          <div style="text-align: center;">
-          <el-button  color="#626aef" type="primary"   round >下载</el-button> </div>
-
-
-
-          <span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;" >3.处理</span>
-          <br><br>
-          <el-tabs type="border-card" class="demo-tabs">
-            <el-tab-pane>
-              <template #label>
-                <span class="custom-tabs-label">
-                  <el-icon><setting /></el-icon>
-                  <span>标签管理</span>
-                </span>
-              </template>
-              Route
-            </el-tab-pane>
-            <el-tab-pane>
-              <template #label>
-                <span class="custom-tabs-label">
-                  <el-icon><EditPen /></el-icon>
-                  <span>画笔工具</span>
-                </span>
-              </template>
-              Route
-            </el-tab-pane>
-
-            <el-tab-pane>
-              <template #label>
-                <span class="custom-tabs-label">
-                  <span>橡皮擦工具</span>
-                </span>
-              </template>
-              Route
-            </el-tab-pane>
-
-          </el-tabs>
-
-          <br>
-          <span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;" >4.分析</span>
-          
+              <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"  id ="two" class="section">2.预测</span></p>
+              <br><br>
+              <div class = "con">
+              <el-switch
+                v-model="value1"
+                class="switch1"
+                @change="switchChange"
+                active-text="高精度"
+                inactive-text="正常"/>
+              <el-tooltip content="单个模型预测，预计3-5分钟" placement="bottom" effect="light">
+                  <el-button class="button2" type="primary"  :loading="ConfirmLoadinglow" @click ="ConfirmLow" round>预测</el-button>
+              </el-tooltip>
+              <!--el-tooltip content="采用5个模型融合预测，预计20-30分钟" placement="bottom" effect="light">
+                  <el-button  color="#626aef"  class="button3" type="primary"  :loading="ConfirmLoadinghigh" @click ="ConfirmHigh" round >高精度预测</el-button>
+              </el-tooltip--></div>
+              <!--ViewThreedafter></ViewThreedafter-->
+              <ViewThreed></ViewThreed>
+              <el-button  color="#626aef" type="primary"   round class="download-button" @click="testt">导出</el-button> 
 
 
 
-        </el-col>
-      </el-row>
-    </el-main>
-    </el-container></el-container>
+              <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"  id ="three" class="section">3.视图</span></p>
+              <br><br>
+              <tool></tool>
+              <br><br>
+
+              <span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"   id ="four" class="section">4.分析</span>
+            
+            </el-main>
+      </el-container>
+      </el-container>
   </div>
+
 </template>
 
-
-<script lang="ts">
+<script>
 
 import { onMounted, ref } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
@@ -138,6 +119,11 @@ import  Menu  from "./Nav.vue";
 import  ViewThreed from"../3D/view3D.vue"
 import  ViewThreedafter from "../3D/view3Dafter.vue"
 import  ViewBefore from "../3D/viewbefore.vue"
+import {Niivue} from '@niivue/niivue'
+import tool from '../3D/3Dtool.vue'
+
+const nv = new Niivue()
+
 
 const router = useRouter();
 const Tool = useTool();
@@ -148,70 +134,146 @@ const activeIndex2 = ref('1')
 
 
 export default{
-  data(){
-    return {
-      //滚动条高度
-      scroll: '',
-      //当前显示的菜单区域
-      istyle: -1,
-      ConfirmLoadinglow:false,
-      ConfirmLoadinghigh:false,
-    }
+data(){
+  return {
+
+    activeName:'tab1',
+    scroll:'',
+    istyle:-1,
+    active:"1",
+    ConfirmLoadinglow:false,
+    ConfirmLoadinghigh:false,
+    volumeList: [
+      {
+        url: "/before.nii.gz",
+      },
+    ]
+  }
+},
+components:{
+  NaV,
+  Menu,
+  ViewThreed,
+  ViewThreedafter,
+  ViewBefore,
+  tool,
+},
+
+mounted(){
+  window.addEventListener('scroll', this.dataScroll);
+  nv.attachTo('gl');
+  nv.loadVolumes(this.volumeList);
+},
+
+
+
+destroy() {
+  // 必须移除监听器，不然当该vue组件被销毁了，监听器还在就会出错
+  window.removeEventListener('scroll', this.onScroll)
+},
+methods:{
+  dataScroll: function () {
+      this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
+    },
+  HandleSubmit() {
+    /*const Volumes = getVolumesFile();
+    //console.log(Volumes)
+    //console.log(lastPos.str)
+    if (Volumes.value.length) {
+      //console.log('haha')
+      //router.push("/preview");
+      handlePreView();
+    } else {
+      //this.$router.push("/three/preview");
+      handlePreView();
+    }*/
+  
   },
-  components:{
-    NaV,
-    Menu,
-    ViewThreed,
-    ViewThreedafter,
-    ViewBefore,
+
+  ConfirmLow(){
+    this.ConfirmLoadinglow=true;
   },
-  methods:{
-    
-    HandleSubmit() {
-      const Volumes = getVolumesFile();
-      //console.log(Volumes)
-      //console.log(lastPos.str)
-      if (Volumes.value.length) {
-        //console.log('haha')
-        //router.push("/preview");
-        handlePreView();
-      } else {
-        //this.$router.push("/three/preview");
-        handlePreView();
+  ConfirmHigh(){
+    this.ConfirmLoadinghigh=true;
+  },
+  testt(tab){
+    window,scrollTo(0,0);
+    console.log(tab);
+  },
+  clicknav(tab){
+      console.log(tab)
+      this.jump(tab)
+  },
+  jump(index) {
+      let jump = document.getElementsByClassName('section');
+      // 获取需要滚动的距离
+      let total = jump[index-1].offsetTop;
+      // Chrome
+      document.body.scrollTop = total;
+      // Firefox
+      document.documentElement.scrollTop = total;
+      // Safari
+      window.pageYOffset = total;
+      // $('html, body').animate({
+      // 'scrollTop': total
+      // }, 400);
+  },
+  loadScroll: function () {
+      var self = this;
+      var sections = document.getElementsByClassName('section');
+      for (var i = sections.length - 1; i >= 0; i--) {
+        if (self.scroll >= sections[i].offsetTop - 100) {
+        //我在上面规定了每个el-tab-pane标签的name属性值为tab+该标签的index值
+          self.active=i+1;
+          self.activeName = 'tab'+i;
+          //console.log(self.activeName);
+          break;
+        }
       }
     },
-    handleOpen : (key: string, keyPath: string[]) => {
-      console.log(key, keyPath)
-    },
-    handleClose : (key: string, keyPath: string[]) => {
-      console.log(key, keyPath)
-    },
-    ConfirmLow(){
-      this.ConfirmLoadinglow=true;
-    },
-    ConfirmHigh(){
-      this.ConfirmLoadinghigh=true;
-    },
-  }
+},
+watch: {
+  //监听scroll变量，只要滚动条位置变化就会执行方法loadScroll
+    scroll: function () {
+      this.loadScroll()
+    }
+  },
+
 }
 
 
 
 
 </script>
-
 <style lang="less" scoped>
-.rightt{
-  
-  position: fixed;
-  .el-menu{
-    height: 100%;
-    position: fixed;
-  }
+.el-header{
+width: 70 vw;
 }
-  .upload {
+.el-aside{
+width: 12vw;
+height: 100vh;
+background-color: rgb(51, 52, 53);
+
+position: fixed;
+}
+.el-main{
+.el-menu-item {
+  --text-color:#fdfdfd;
+  background-color: rgb(51, 52, 53);
+}
+.el-menu-item.is-active {
+  text-color:#fdfdfd;
+  background-color: #3f92e0 !important;
+}
+width: 88vw;
+height: 100%;
+
+position: relative;
+left:12vw;
+
+.upload {
   height: 45vh;
-  width: 100%;
+  width: 80vw;
   .uploadbox {
     height: 100%;
     display: flex;
@@ -251,6 +313,7 @@ export default{
         font-size: 12px;
       }
     }
+
     .upload-demo:hover {
       border-color: #409eff;
     }
@@ -259,10 +322,16 @@ export default{
     }
   }
 }
-  
+.switch1{
+      transform: translate(15vw,0vh);
+}
+.conv{
+    width: 80vw;
+
+  }
 .con{ 
-  height: 10vh;
-  width: 100%;
+  height: 5vh;
+  width: 80vw;
   .button2{
     transform: translate(20vw,0vh);
   }
@@ -273,7 +342,7 @@ export default{
 
 .demo-tabs > .el-tabs__content {
   padding: 32px;
-  color: #6b778c;
+  color: #8c6d6b;
   font-size: 32px;
   font-weight: 600;
 }
@@ -284,6 +353,13 @@ export default{
   vertical-align: middle;
   margin-left: 4px;
 }
+.download-button{
+  position: relative;
+  transform: translate(40vw,0vh);
+}
+.el-tabs{
+  width: 80vw;
+}
+}
 
 </style>
-

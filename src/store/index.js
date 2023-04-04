@@ -76,7 +76,7 @@ export const useTool = defineStore("tool", () => {
   }
   // 鼠标右键工具
   function handleMouse(id,RulerColor) {
-    console.log(id);
+    console.log(id);0
     switch (id) {
       
       case "none":
@@ -180,21 +180,24 @@ export const useTool = defineStore("tool", () => {
   function handleSave(id) {
     switch (id) {
       case "SaveDocument":
-        Views.saveDocument("all.nvd");
+        Views.saveDocument("image.nvd");
         return;
       case "SaveImage":
-        Views.saveImage("all.nii", true);
+        Views.saveImage("image.nii", true);
         return;
       case "SaveBitmap":
-        Views.saveScene("ScreenShot.png");
+        Views.saveScene("image.png");
         return;
     }
   }
   // 更改材质
-  function handleMaterial(index, id) {
+  function handleMaterial(xyz) {
     Views.volumes[index].colorMap = id;
+    console.log(Views.volumes)
+    window.alert(Views.volumes.length) 
     Views.updateGLVolume();
     return;
+    
   }
   // 添加文件时的相关操作
   function AddVolumesFile(file) {
@@ -218,6 +221,18 @@ export const useTool = defineStore("tool", () => {
   function getViews() {
     return Views;
   }
+  function setpen(key,color,fill){
+   /* Views.setDrawingEnabled(true);
+    Views.setPenValue(value, fill);*/
+    if(key === true){
+      Views.setDrawingEnabled(true);
+      Views.setPenValue(color, fill);
+    }
+    else{
+      Views.setDrawingEnabled(false);
+    }
+  }
+
   return {
     CanvasInit,
     canvasInit,
@@ -234,7 +249,8 @@ export const useTool = defineStore("tool", () => {
     RemoveVolumesFile,
     toolSwitch,
     lastPos,
-    HandleColor
+    HandleColor,
+    setpen,
   };
 });
 export const useAside = defineStore("user", () => {

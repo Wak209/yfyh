@@ -22,13 +22,13 @@ import { reactive, onMounted } from "vue";
 
 const LabelList={" 0   ":"背景"," 1   ":"脾脏"," 2   ":"右肾"," 3   ":"左肾"," 4   ":"胆囊"
 ," 5   ":"食管"," 6   ":"肝脏"," 7   ":"胃"," 8   ":"主动脉"," 9   ":"下腔动脉"
-," 10   ":"胰腺"," 11   ":"右肾上腺"," 12   ":"左肾上腺"," 13   ":"左肾上腺"," 14   ":"膀胱"," 15   ":"前列腺/子宫"};
+," 10   ":"胰腺"," 11   ":"右肾上腺"," 12   ":"左肾上腺"," 13   ":"十二指肠"," 14   ":"膀胱"," 15   ":"前列腺/子宫"};
 const Labellist={0:"背景",1:"脾脏",2:"右肾",3:"左肾",4:"胆囊"
 ,5:"食管",6:"肝脏",7:"胃",8:"主动脉",9:"下腔动脉"
-,10:"胰腺",11:"右肾上腺",12:"左肾上腺",13:"左肾上腺",14:"膀胱",15:"前列腺/子宫"};
+,10:"胰腺",11:"右肾上腺",12:"左肾上腺",13:"十二指肠",14:"膀胱",15:"前列腺/子宫"};
 
 
-const volumes = reactive({ url: "/after.nii.gz" });
+const volumes = reactive({ url: "/basic/after.nii.gz" });
 
 
 // use Store
@@ -42,6 +42,7 @@ function Attach() {
   const Views = CanvasInit();
   Views.attachTo("nv");
   let index = volumes.url.indexOf(".");
+  //console.log(index)
   let str = volumes.url.slice(index);
   if (str === ".nvd") {
     Views.loadDocumentFromUrl([volumes.url]);

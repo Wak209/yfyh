@@ -1,10 +1,11 @@
 <template>
+
   <el-menu :default-active="this.$route.path" router mode="horizontal">
     <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
         {{ item.navItem }}
     </el-menu-item>
-    </el-menu>
-  <div class="h-6" />
+  </el-menu>
+
 </template>
 
 <script lang="ts" >
@@ -16,12 +17,17 @@ export default ({
       return {
         navList:[
             {name:'/',navItem:'Home'},
-            {name:'/two',navItem:'2D'},
+           // {name:'/two',navItem:'2D'},
             {name:'/three',navItem:'3D'},
-            {name:'/others',navItem:'Others'},
+            {name:'/others',navItem:'About'},
         ]
       }
     }
 
 })
 </script>
+
+<style>
+
+
+</style>
