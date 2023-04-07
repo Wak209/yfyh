@@ -28,22 +28,18 @@
               </el-menu-item>
 
               <el-menu-item index="4" @click="clicknav(4)" name ='tab3'>
-               <span style="color:white">4.分析</span>
+              <span style="color:white">4.分析</span>
 
               </el-menu-item>
               </el-menu>
           </el-aside>
-        
-        
             <el-main >
-           
               <p><span  style="font-size:xx-large;  font-weight:bold ; color: cornflowerblue;" id ="one" class="section">1.上传文件&nbsp&nbsp&nbsp</span><span style="font-size:large;  font-weight:bold;color: cornflowerblue;" >(支持格式：nii、nii.gz、dcm、raw、mhd等)</span></p>
 
               <div class="Conv">
                   <canvas id="gl"></canvas>
               </div>
               <!--ViewBefore></ViewBefore-->
-
               <div class="upload">
               <div class="uploadbox">
               <el-upload
@@ -52,7 +48,7 @@
                   :multiple="false"
                   :limit="1"
                   :auto-upload="false"
-                  
+                  :on-change="handleChange"
                   :action="none"
               >
                   <el-icon class="el-icon--upload"><Plus /></el-icon>
@@ -61,36 +57,20 @@
                   <el-button
                   class="button1"
                   type="primary"
-                  @click="HandleSubmit()"
+                  @click="HandleShow()"
                   style="text-align:center"
-                  
                   >
-                  确认上传
+                  展示
                   </el-button>
+                  
               </div>
               </div>
               <!--ViewBefore></ViewBefore-->
               <!--ViewThreed></ViewThreed-->
 
-
-              <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"  id ="two" class="section">2.预测</span></p>
-              <br><br>
-              <div class = "con">
-              <el-switch
-                v-model="value1"
-                class="switch1"
-                @change="switchChange"
-                active-text="高精度"
-                inactive-text="正常"/>
-              <el-tooltip content="单个模型预测，预计3-5分钟" placement="bottom" effect="light">
-                  <el-button class="button2" type="primary"  :loading="ConfirmLoadinglow" @click ="ConfirmLow" round>预测</el-button>
-              </el-tooltip>
-              <!--el-tooltip content="采用5个模型融合预测，预计20-30分钟" placement="bottom" effect="light">
-                  <el-button  color="#626aef"  class="button3" type="primary"  :loading="ConfirmLoadinghigh" @click ="ConfirmHigh" round >高精度预测</el-button>
-              </el-tooltip--></div>
               <!--ViewThreedafter></ViewThreedafter-->
-              <ViewThreed></ViewThreed>
-              <el-button  color="#626aef" type="primary"   round class="download-button" @click="testt">导出</el-button> 
+              <ViewThreed ></ViewThreed>
+              <el-button  color="#626aef" type="primary"   round class="download-button" @click="download">导出</el-button> 
 
 
 
@@ -100,7 +80,7 @@
               <br><br>
 
               <span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"   id ="four" class="section">4.分析</span>
-            
+              <analysis></analysis>
             </el-main>
       </el-container>
       </el-container>
@@ -121,6 +101,10 @@ import  ViewThreedafter from "../3D/view3Dafter.vue"
 import  ViewBefore from "../3D/viewbefore.vue"
 import {Niivue} from '@niivue/niivue'
 import tool from '../3D/3Dtool.vue'
+import axios from 'axios'
+import analysis from '../3D/analysis.vue'
+import { saveAs } from 'file-saver';
+
 
 const nv = new Niivue()
 
@@ -132,22 +116,26 @@ const { handlePreView } = Aside;
 const { getVolumesFile, AddVolumesFile, RemoveVolumesFile } = Tool;
 const activeIndex2 = ref('1')
 
-
+var List =[
+      {
+        url: "/basic/before.nii.gz",
+      },
+    ]
 export default{
 data(){
   return {
-
+    fileList: [],
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    fileUrl: '',
     activeName:'tab1',
     scroll:'',
     istyle:-1,
     active:"1",
     ConfirmLoadinglow:false,
     ConfirmLoadinghigh:false,
-    volumeList: [
-      {
-        url: "/before.nii.gz",
-      },
-    ]
+    volumeList:List
   }
 },
 components:{
@@ -157,6 +145,7 @@ components:{
   ViewThreedafter,
   ViewBefore,
   tool,
+  analysis
 },
 
 mounted(){
@@ -175,7 +164,10 @@ methods:{
   dataScroll: function () {
       this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
     },
-  HandleSubmit() {
+  handleChange(file, fileList) { //文件数量改变
+    this.fileList = fileList;
+  },
+  HandleShow() {
     /*const Volumes = getVolumesFile();
     //console.log(Volumes)
     //console.log(lastPos.str)
@@ -187,9 +179,31 @@ methods:{
       //this.$router.push("/three/preview");
       handlePreView();
     }*/
-  
-  },
+    var param = new FormData();
+        this.fileList.forEach(
+          (val, index) => {
+            param.append("file", val.raw);
+          }
+        );
 
+        axios.post("http://127.0.0.1:5000/upload", param).then(responce => {
+          console.log(responce)
+          if(responce.data === 'File saved successfully!')
+          {
+            console.log(this.volumeList)
+            this.volumeList = [{url: "/now.nii.gz",}]
+            window.addEventListener('scroll', this.dataScroll);
+            nv.attachTo('gl');
+            nv.loadVolumes(this.volumeList);
+          }
+        });
+        /*
+        this.$message({
+          message: "上传成功！",
+          duration: 1000
+        });*/
+  },
+  
   ConfirmLow(){
     this.ConfirmLoadinglow=true;
   },
@@ -231,6 +245,13 @@ methods:{
         }
       }
     },
+    async download() {
+    this.fileUrl="/basic/before.nii.gz"
+    const response = await axios.get(`http://127.0.0.1:5000/download?file_url=${this.fileUrl}`, {
+      responseType: 'blob'
+    })
+    saveAs(response.data, 'download.nii.gz')
+  }
 },
 watch: {
   //监听scroll变量，只要滚动条位置变化就会执行方法loadScroll
@@ -262,7 +283,7 @@ position: fixed;
   background-color: rgb(51, 52, 53);
 }
 .el-menu-item.is-active {
-  text-color:#fdfdfd;
+  --text-color:#fdfdfd;
   background-color: #3f92e0 !important;
 }
 width: 88vw;
@@ -322,6 +343,9 @@ left:12vw;
     }
   }
 }
+.button11{
+  transform: translate(38vw,0);
+}
 .switch1{
       transform: translate(15vw,0vh);
 }
@@ -333,7 +357,7 @@ left:12vw;
   height: 5vh;
   width: 80vw;
   .button2{
-    transform: translate(20vw,0vh);
+    transform: translate(39vw,0vh);
   }
   .button3{
     transform: translate(40vw,0vh);

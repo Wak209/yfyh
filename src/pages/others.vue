@@ -14,6 +14,7 @@
 import { ref } from 'vue'
 import NaV from "./Home.vue";
 
+
 export default {
     data() {
         return {

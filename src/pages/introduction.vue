@@ -122,7 +122,7 @@ export default {
 .three{
     width: 100%;
     position:absolute;
-    top:160vh;
+    top:150vh;
     display: table;
 }
 .Img3{

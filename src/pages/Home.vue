@@ -18,7 +18,7 @@ export default ({
         navList:[
             {name:'/',navItem:'Home'},
            // {name:'/two',navItem:'2D'},
-            {name:'/three',navItem:'3D'},
+            {name:'/three',navItem:'3D Segmentation'},
             {name:'/others',navItem:'About'},
         ]
       }

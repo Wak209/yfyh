@@ -11,14 +11,14 @@ import os
 import sys
 import nibabel as nib
 List=[]
-Name=['背景','脾脏','右肾','左肾','胆囊','食管','肝脏','胃','主动脉','下腔动脉','胰腺','右肾上腺','左肾上腺','十二指肠','膀胱','前列腺/子宫',]
+Name=['背景','脾脏','右肾','左肾','胆囊','食管','肝脏','胃','主动脉','下腔静脉','胰腺','右肾上腺','左肾上腺','十二指肠','膀胱','前列腺/子宫',]
 label_name=[]
 label_num=[]
 
-def getall():
+def getall(label_path):
     global label_array
     List=[]
-    label_path=r"C:\Users\86159\Desktop\vuenii\backend\submit\2.nii.gz"
+    #label_path=r"C:\Users\86159\Desktop\vuenii\backend\submit\2.nii.gz"
     label_obj = nib.load(label_path)
     label_array = label_obj.get_fdata()
     lt = np.unique(label_array, return_counts=True)
@@ -123,7 +123,7 @@ def getp(ORname,V,xlen,ylen,zlen):
     elif ORname == '主动脉':
         ruler=85794.17948717948
         return  ((1-(ruler-V)*(1-P)/(ruler-31186)) if V<ruler else (208580-V)*(1-P)/(208580-ruler)+P)
-    elif ORname == '下腔动脉':
+    elif ORname == '下腔静脉':
         ruler=68947.41025641025
         return  ((1-(ruler-V)*(1-P)/(ruler-47342)) if V<ruler else (117923-V)*(1-P)/(117923-ruler)+P)
     elif ORname == '胰腺':
@@ -175,7 +175,7 @@ def getarea(id,x,y,z):
     #print(Xarea,Yarea,Zarea)
 
 def haddlechange(list):
-    Label_path=r"C:\Users\86159\Desktop\vuenii\backend\submit\2.nii.gz"
+    Label_path=r"C:\Users\86159\Desktop\vuenii\public\result.nii.gz"
     Label = sitk.ReadImage(Label_path)
     Label_array = sitk.GetArrayFromImage(Label)
     wait=[]

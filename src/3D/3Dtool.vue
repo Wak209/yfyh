@@ -3,6 +3,7 @@
     <el-tab-pane>
     <template #label>
         <span class="custom-tabs-label">
+        <el-icon><Edit /></el-icon>
         <span>修改标签</span>
         </span>
     </template>
@@ -15,7 +16,8 @@
     <el-tab-pane>
     <template #label>
         <span class="custom-tabs-label">
-        <span>平移拖动</span>
+        <el-icon><Crop /></el-icon>
+        <span>&nbsp平移拖动</span>
         </span>
     </template>
     <br>
@@ -30,7 +32,8 @@
     <el-tab-pane>
     <template #label>
         <span class="custom-tabs-label">
-        <span>测量工具</span>
+            <el-icon><Rank/></el-icon>
+        <span>&nbsp测量工具</span>
         </span>
     </template>
         <br>
@@ -51,7 +54,7 @@
     <template #label>
         <span class="custom-tabs-label">
         <el-icon><EditPen /></el-icon>
-        <span>画笔工具</span>
+        <span>&nbsp画笔工具</span>
         </span>
     </template>
     <el-switch
@@ -82,28 +85,41 @@
     <el-tab-pane>
     <template #label>
         <span class="custom-tabs-label">
-        <span>保存</span>
+        <el-icon><Folder/></el-icon>
+        <span>&nbsp&nbsp保存</span>
         </span>
     </template>
     <el-select v-model="loadvalue" class="mb-7" placeholder="Select" >
     <el-option
-      v-for="item in Options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
+        v-for="item in Options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
     />
     </el-select>
     <el-button type="primary" plain class="mb-8" @click = "download" >下载</el-button>
+    </el-tab-pane>
+
+
+    <el-tab-pane>
+    <template #label>
+        <span class="custom-tabs-label">
+        <el-icon><FolderAdd /></el-icon>
+        <span>&nbsp自定义展示文件</span>
+        </span>
+    </template>
+    <add></add>
     </el-tab-pane>
 </el-tabs>
 </template>
 
 
-<script lang="ts" setup>
+<script setup>
 import { hasDynamicKeyVBind } from '@vue/compiler-core';
 import { ref } from 'vue'
 import { useTool } from '../store/index.js'
-
+import axios from 'axios';
+import add from './add.vue'
 const Tool = useTool();
 const {
   handleSave,
@@ -114,6 +130,7 @@ const {
   getVolumesFile,
   HandleColor,
   setpen,
+  AddVolumesFile
 } = Tool;
 const seedxyz=[384,501,71]
 const value1 = ref(false)
@@ -121,7 +138,6 @@ const value2 = ref(false)
 const value3 = ref(false)
 const fillvalue = ref(false)
 const penvalue = ref(false)
-
 const loadvalue = ref(1)
 var selectvalue = ref(1)
 var Views = ref();
@@ -223,6 +239,58 @@ function download(){
         handleSave("SaveBitmap")
     }
 } 
+
+function changevolumes(filename)
+{
+    AddVolumesFile({url: "/vol/"+filename})
+}
+/*
+function handleFile(fileList)
+{
+    this.FileList = fileList;
+    console.log(fileList)
+    console.log(this.FileList)
+    //console.log(this.fileList)
+    var param = new FormData();
+            fileList.forEach(
+						(val, index) => {
+							param.append("file", val.raw);
+						}
+					);
+            axios.post("http://127.0.0.1:5000/uploadvol", param).then(responce => {
+                console.log(responce.data)
+                });
+}*/
+/*
+export default{
+    data(){
+        return{
+            fileList:[],
+        }
+    },
+    methods:{
+    handleChange(file, fileList)
+        {
+            
+            this.fileList = fileList;
+            console.log(this.fileList)
+            var param = new FormData();
+            
+                            this.fileList.forEach(
+                                (val, index) => {
+                                    param.append("file", val.raw);
+                                    console.log(val.raw)
+                                }
+                            );
+                
+                            axios.post("http://127.0.0.1:5000/uploadvol", param).then(responce => {
+                    console.log(responce.data)
+                    changevolumes(responce.data)
+                });
+        },
+    }
+}
+*/
 </script>
 
 

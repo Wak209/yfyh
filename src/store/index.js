@@ -34,24 +34,7 @@ export const useTool = defineStore("tool", () => {
 
     return Views;
   }
-
-  function canvasInit() {
-    Viewss = new Niivue({
-      logging: "true",
-      dragAndDropEnabled: false,
-      backColor: [255, 255, 255, 0],
-      show3Dcrosshair: true,
-      onLocationChange: handleIntensityChange2,
-    })
-    Viewss.opts.multiplanarForceRender = true;
-    Viewss.setRadiologicalConvention(false);
-    Viewss.drawOpacity = 0.4;
-    Viewss.setSliceMM(true);
-
-    return Viewss;
-  }
   // 相关配置
-
   function handleIntensityChange(data) {
     lastPos.vox = data.vox[0] + " , " + data.vox[1] + " , " + data.vox[2];
     let OriStr = data.string;
@@ -86,9 +69,9 @@ export const useTool = defineStore("tool", () => {
         Views.opts.dragMode = Views.dragModes.contrast;
         break;
       case "measurement":
+        Views.opts.rulerColor =RulerColor;
         Views.opts.dragMode = Views.dragModes.measurement;
         //Views.opts.rulerColor = [0.5, 0.5, 0.9, 0.3];
-        Views.opts.rulerColor =RulerColor;
         break;
       case "pan":
         Views.opts.dragMode = Views.dragModes.pan;
@@ -203,12 +186,10 @@ export const useTool = defineStore("tool", () => {
   function AddVolumesFile(file) {
     if (volumes.value.length == 0) {
       volumes.value.push(file);
+      Attach();
     } else {
-      ElMessage({
-        showClose: true,
-        message: "仅限单个文件上传",
-        type: "warning",
-      });
+      RemoveVolumesFile();
+      AddVolumesFile(file);
     }
   }
   function RemoveVolumesFile() {
@@ -221,6 +202,7 @@ export const useTool = defineStore("tool", () => {
   function getViews() {
     return Views;
   }
+
   function setpen(key,color,fill){
    /* Views.setDrawingEnabled(true);
     Views.setPenValue(value, fill);*/
@@ -232,10 +214,18 @@ export const useTool = defineStore("tool", () => {
       Views.setDrawingEnabled(false);
     }
   }
-
+  function Attach() {
+    console.log(volumes)
+    console.log(lastPos.str)
+    const Views = CanvasInit();
+    Views.attachTo("nv");
+    let Volumes=volumes.value[0];
+    console.log(Volumes)
+    Views.loadVolumes([Volumes]);
+    console.log(Volumes)
+  }
   return {
     CanvasInit,
-    canvasInit,
     handleIntensityChange,
     handleColor,
     handleScreen,

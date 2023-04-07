@@ -1,8 +1,9 @@
 <template>
+    <mul></mul>
     <br>
     <h2 style="color:mediumpurple;">&nbsp&nbsp&nbsp标签编辑并导出</h2>
     <br>
-    <h3 style="color:mediumpurple;">选择标签</h3>
+    <!--h3 style="color:mediumpurple;">选择标签</h3-->
     <el-checkbox v-model="checked1" label="脾脏" size="small" />
     <el-checkbox v-model="checked2" label="右肾" size="small" />
     <el-checkbox v-model="checked3" label="左肾" size="small" />
@@ -11,7 +12,7 @@
     <el-checkbox v-model="checked6" label="肝脏" size="small" />
     <el-checkbox v-model="checked7" label="胃" size="small" />
     <el-checkbox v-model="checked8" label="主动脉" size="small" />
-    <el-checkbox v-model="checked9" label="下腔动脉" size="small" />
+    <el-checkbox v-model="checked9" label="下腔静脉" size="small" />
     <el-checkbox v-model="checked10" label="胰腺" size="small" />
     <el-checkbox v-model="checked11" label="右肾上腺" size="small" />
     <el-checkbox v-model="checked12" label="左肾上腺" size="small" />
@@ -19,12 +20,15 @@
     <el-checkbox v-model="checked14" label="膀胱" size="small" />
     <el-checkbox v-model="checked15" label="前列腺/子宫" size="small" />
     <br><br>
-    <el-button @click="handleClick">导出</el-button>
+    <el-button :loading="Load" @click="handleClick" class="last" type="primary" >导出</el-button>
 </template>
 
 <script setup>
 import axios from 'axios'
 import { ref } from 'vue'
+import mul  from  './userdecide.vue'
+
+
 const checked1 = ref(true)
 const checked2 = ref(true)
 const checked3 = ref(true)
@@ -40,7 +44,7 @@ const checked12 = ref(true)
 const checked13 = ref(true)
 const checked14 = ref(true)
 const checked15 = ref(true)
-
+var Load = ref(false)
 
 const download = async() => {
         const fileUrl="/change.nii.gz"
@@ -50,11 +54,20 @@ const download = async() => {
     saveAs(response.data, 'change.nii.gz')
 }
 function handleClick(){
+    Load = true
+    console.log(Load)
     var list = [checked1,checked2,checked3,checked4,checked5,checked6,checked7,checked8,checked9,checked10,checked11,checked12,checked13,checked14,checked15]
     axios.post("http://127.0.0.1:5000/Change", list).then(responce => {
+        Load = false
             download()
-        })
+    })
 }
 
 </script>
+
+<style>
+.last{
+    transform: translate(33vw,0);
+}
+</style>
 
