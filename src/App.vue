@@ -5,14 +5,14 @@
         <side></side>
       </el-aside>
       <el-container>
-        <el-main>
+        <el-main class="hhh">
           <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
 
     <el-backtop :bottom="30">
-    <!--div style="{
+    <div style="{
       height: 100%;
       width: 100%;
       background-color: #f2f5f6;
@@ -20,14 +20,29 @@
       text-align: center;
       line-height: 40px;
       color: #1989fa;
-      }"></div-->
+      }"></div>
   </el-backtop>
 
   </div>
 </template>
-
 <script >
 
 </script>
+<style>
+.hhh{
+  margin: 0;
+  padding: 0;
+}
+</style>
+<style lang="scss">
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+::-webkit-scrollbar {
+  width: 0 !important;height: 0;
+}
+</style>
+
+
 
 

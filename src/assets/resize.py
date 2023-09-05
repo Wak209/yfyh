@@ -1,12 +1,8 @@
 from PIL import Image
- 
-img = Image.open("src/assets/12.png")
- 
-print( img.size)
-x = int(img.size[0]*(945/1570))
-y = int(img.size[1]*(945/1570))
-out = img.resize((x,y))
- 
-out.save("src/assets/new.png")
- 
- 
+
+img = Image.open(r"C:\Users\86159\Desktop\vuenii\src\assets\wk.jpg")
+
+print(img.size)
+
+out = img.resize((200,300))
+out.save(r"C:\Users\86159\Desktop\vuenii\src\assets\wkk.jpg")

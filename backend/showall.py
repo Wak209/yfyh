@@ -11,7 +11,7 @@ import datetime
 import os
 import sys
 import nibabel as nib
-
+import shutil
 List=[[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
 Name=['背景','脾脏','右肾','左肾','胆囊','食管','肝脏','胃','主动脉','下腔静脉','胰腺','右肾上腺','左肾上腺','十二指肠','膀胱','前列腺/子宫',]
 label_name=[]
@@ -166,6 +166,8 @@ def Main():
     for file in filelist:
         getall(file)
     print(List)
+    shutil.rmtree(r"C:\Users\86159\Desktop\vuenii\public\all")  
+    os.mkdir(r"C:\Users\86159\Desktop\vuenii\public\all")  
     return List
 
 '''if __name__ == "__main__":

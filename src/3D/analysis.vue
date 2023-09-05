@@ -1,9 +1,8 @@
 <template>
-    <br><br>
     <el-row>
       <el-col :span="8">
         <el-tooltip content="预计时长：半分钟" placement="bottom" effect="light">
-          <el-button class="button" @click="handleclick" round type="primary" :loading="loadone">分析</el-button>
+          <el-button class="button" @click="handleclick" round type="success" :loading="loadone">分析</el-button>
         </el-tooltip>
       </el-col>
       <!--p style="color:cornflowerblue">"健康程度"仅供参考，请以医生建议为准</p-->
@@ -18,15 +17,16 @@
             <el-button  type="primary" :loading="loadtwo">选择本地文件</el-button>
       </el-upload>
     </el-row>
-    <br>
-
+    
+    
     <!--el-col :span="10"-->
     <el-table
     class="Table"
     :data="tableData"
     :key="certin"
-    style="width: 70%"
+    style="width: 76%"
     @row-click="editCurrentApplicationApproval"
+    @header-click="tableheaderclick"
   >
     <el-table-column prop="name" label="器官"  width="100" />
       <!-- eslint-disable-next-line-->
@@ -77,13 +77,13 @@
       </div>
     </template>
     <div v-show="shownum==='器官名称'"><p>请点击表格查看</p></div>
-    <div v-show="shownum==='脾脏'"><p>&nbsp&nbsp&nbsp&nbsp脾脏是一个位于左上腹部的器官，它有助于身体对红血球进行过滤和分解，同时也是免疫系统的一部分，负责产生和储存淋巴细胞和抗体，常见的脾脏疾病包括脾梗死、脾功能亢进、脾肿大等。<br>&nbsp&nbsp&nbsp&nbsp脾是重要的淋巴器官，位于腹腔的左上方，呈扁椭圆形，暗红色、质软而脆，当局部受暴力打击易破裂出血。脾位于左季肋区胃底与膈之间，恰与第9-11肋相对，其长轴与第10肋一致。正常情况下，左肋弓下缘不能触及。脾分为内、外两面，上、下两缘，前、后两端。内面凹陷与胃底、左肾、左肾上腺、胰尾和结肠左曲为邻，称为脏面。脏面近中央处有一条沟，是神经、血管出入之处，称脾门。外面平滑而隆凸与膈相对，称为膈面。上缘前部有2-3个切迹，称脾切迹。脾肿大时，脾切迹仍存在可作为触诊的标志。在脾附近，胃脾韧带及大网膜中，常可见到暗红色，大小不等，数目不一的副脾。因脾功能亢进作脾切除时，应将副脾一并切除。脾属于网状皮系统，是人体最大的淋巴器官，其结构基本上与淋巴结相似，由被膜、小梁及淋巴组织构成。其与淋巴结不同的地方是没有淋巴窦，但其中具有大量血窦。</p></div>
+    <div v-show="shownum==='脾脏'"><p>&nbsp&nbsp&nbsp&nbsp脾脏是一个位于左上腹部的器官，它有助于身体对红血球进行过滤和分解，同时也是免疫系统的一部分，负责产生和储存淋巴细胞和抗体，常见的脾脏疾病包括脾梗死、脾功能亢进、脾肿大等。<br>&nbsp&nbsp&nbsp&nbsp脾是重要的淋巴器官，位于腹腔的左上方，呈扁椭圆形，暗红色、质软而脆。正常情况下，左肋弓下缘不能触及。脾肿大时，脾切迹仍存在可作为触诊的标志。在脾附近，胃脾韧带及大网膜中，常可见到暗红色，大小不等，数目不一的副脾。因脾功能亢进作脾切除时，应将副脾一并切除。脾属于网状皮系统，是人体最大的淋巴器官，其结构基本上与淋巴结相似，由被膜、小梁及淋巴组织构成。其与淋巴结不同的地方是没有淋巴窦，但其中具有大量血窦。</p></div>
     <div v-show="shownum==='胆囊'"><p>&nbsp&nbsp&nbsp&nbsp胆囊是一个位于肝脏下方的小囊状器官，主要功能是储存由肝脏产生的胆汁，当身体需要时，胆囊会将胆汁释放到小肠中，帮助消化脂肪。常见的胆囊疾病包括胆囊结石、胆囊炎、胆囊切除术等。<br>&nbsp&nbsp&nbsp&nbsp胆囊，是位于右方肋骨下肝脏后方的梨形囊袋构造（肝的胆囊窝内），有浓缩和储存胆汁之作用。胆囊分底、体、颈、管四部，颈部连胆囊管。胆囊壁由粘膜、肌层和外膜三层组成。</p></div>
     <div v-show="shownum==='右肾'"><p>&nbsp&nbsp&nbsp&nbsp肾脏是人体内最重要的器官之一，主要功能是过滤血液，排除废物和过多的水分，并产生尿液。右肾和左肾位于腹腔内两侧，右肾比左肾略低，两者大小和功能相似。常见的肾脏疾病包括肾结石、肾囊肿、肾炎、肾衰竭等。<br>&nbsp&nbsp&nbsp&nbsp肾脏是人体泌尿系统中最重要的器官，在血液循环系统中，承担着滤过代谢废物并排出体外及重吸收各种营养物质的重要使命！肾脏位于人体腹腔后上部，脊椎两旁各有一个，受肝脏影响，右肾一般比左肾略低1-2厘米。除了肾脏以外，泌尿系统还包括输尿管、膀胱及尿道组成，泌尿系统的主要功能为排泄。
-肾脏形似放大版的蚕豆，每一个肾的重量大概在100—200克，质柔软，是一个实质性的器官。肾脏皮质呈红褐色，分为外缘和内缘两部分，肾外缘为凸面，内缘为凹面，凹面中部为肾门，所有血管、神经及淋巴管均由此进入肾脏，肾盂则由此走出肾外。
+
 肾单位是组成肾脏的结构和功能的基本单位，包括肾小体和肾小管。每个肾脏约有一百多万个肾单位，肾单位是肾脏部位物质交换和能量传输的重要系统，包括肾小球滤过血液形成原尿和肾小管、集合管重吸收营养物质及其毛细血管物质交换过程。因此，肾单位是肾脏微循环系统发挥作用的基本单位，对肾脏各功能的的正常运转起着决定性作用。</p></div>
     <div v-show="shownum==='左肾'"><p>&nbsp&nbsp&nbsp&nbsp肾脏是人体内最重要的器官之一，主要功能是过滤血液，排除废物和过多的水分，并产生尿液。右肾和左肾位于腹腔内两侧，右肾比左肾略低，两者大小和功能相似。常见的肾脏疾病包括肾结石、肾囊肿、肾炎、肾衰竭等。<br>&nbsp&nbsp&nbsp&nbsp肾脏是人体泌尿系统中最重要的器官，在血液循环系统中，承担着滤过代谢废物并排出体外及重吸收各种营养物质的重要使命！肾脏位于人体腹腔后上部，脊椎两旁各有一个，受肝脏影响，右肾一般比左肾略低1-2厘米。除了肾脏以外，泌尿系统还包括输尿管、膀胱及尿道组成，泌尿系统的主要功能为排泄。
-肾脏形似放大版的蚕豆，每一个肾的重量大概在100—200克，质柔软，是一个实质性的器官。肾脏皮质呈红褐色，分为外缘和内缘两部分，肾外缘为凸面，内缘为凹面，凹面中部为肾门，所有血管、神经及淋巴管均由此进入肾脏，肾盂则由此走出肾外。
+
 肾单位是组成肾脏的结构和功能的基本单位，包括肾小体和肾小管。每个肾脏约有一百多万个肾单位，肾单位是肾脏部位物质交换和能量传输的重要系统，包括肾小球滤过血液形成原尿和肾小管、集合管重吸收营养物质及其毛细血管物质交换过程。因此，肾单位是肾脏微循环系统发挥作用的基本单位，对肾脏各功能的的正常运转起着决定性作用。</p></div>
     <div v-show="shownum==='食管'"><p>&nbsp&nbsp&nbsp&nbsp食管是一条管状结构，连接口腔和胃，负责将食物运输到胃中。常见的食管疾病包括食管癌、食管炎、食管溃疡等。<br>&nbsp&nbsp&nbsp&nbsp食管是消化管道的一部分，上连于咽，沿脊柱椎体下行，穿过膈肌的食管裂孔通入胃，全长约25厘米。依食管的行程可将其分为颈部、胸部和腹部三段。食管主要由环节肌层(内层)和纵行肌层(外层)组成。由于这两种肌肉的收缩蠕动，迫使食物进入胃，故其主要作用是向胃内推进食物。</p></div>
     <div v-show="shownum==='肝脏'"><p>&nbsp&nbsp&nbsp&nbsp肝脏是人体内最大的内脏器官之一，负责合成胆汁、代谢药物和毒素、储存能量等。常见的肝脏疾病包括肝炎、肝硬化、脂肪肝等。<br>&nbsp&nbsp&nbsp&nbsp肝脏是身体内以代谢功能为主的一个器官，并在身体里面扮演着去氧化，储存肝糖，分泌性蛋白质的合成等等。肝脏也制造消化系统中之胆汁。肝脏是人体内脏里最大的器官，位于人体中的腹部位置，在右侧横隔膜之下，位于胆囊之前端且于右边肾脏的前方，胃的上方。肝脏是人体消化系统中最大的消化腺，为一红棕色的V 字形器官。</p></div>
@@ -97,8 +97,9 @@
     <div v-show="shownum==='膀胱'"><p>&nbsp&nbsp&nbsp&nbsp膀胱是一个储存尿液的器官，位于盆腔底部。常见的膀胱疾病包括膀胱炎、膀胱结石、膀胱癌等。膀胱的正常功能需要神经、肌肉和泌尿系统的协调工作。<br>&nbsp&nbsp&nbsp&nbsp是储存尿液的肌性囊状器官，其形状、大小、位置和壁的厚度随尿液充盈程度而异。通常成人的膀胱容量平均为350-500毫升，超过500毫升时候，因膀胱壁张力过大而产生疼痛。膀胱的最大容量为800毫升，新生儿的膀胱容量约为成人的十分之一，女性的容量小于男性，老年人因膀胱肌张力低而容量增大。</p></div>
     <div v-show="shownum==='前列腺/子宫'"><p>&nbsp&nbsp&nbsp&nbsp前列腺是男性生殖系统的一部分，位于膀胱下方，主要分泌前列腺液，帮助维持精液的液态。常见的前列腺疾病包括前列腺炎、前列腺增生、前列腺癌等。子宫是女性生殖系统的一部分，位于盆腔内，主要功能是容纳和孕育胎儿。常见的子宫疾病包括子宫肌瘤、子宫内膜异位症、子宫癌等。子宫还参与了月经周期的调节和生殖激素的代谢。</p></div>
   </el-card>
+  <img v-if="isshowed" src="../../public/15972129987/graph/v.jpg?v=1" id="Img" class="pic1"/>
   <!--Multi></Multi-->
-  <change></change>
+  <!--change></change-->
 </template>
 
 
@@ -122,12 +123,52 @@ export default{
       fileList:[],
       loadone:false,
       loadtwo:false,
+      isshowed:false,
     }
   },
   components:{
     change,
   },
   methods:{
+    tableheaderclick(column, event)
+    {
+      console.log(column.property)
+      if(column.property==="num")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/v.jpg?v=" + new Date().getTime();
+      }
+      else if(column.property==="Xlen")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/Xlen.jpg?v=" + new Date().getTime();
+      }
+      else if(column.property==="Ylen")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/Ylen.jpg?v=" + new Date().getTime();
+      }
+      else if(column.property==="Zlen")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/Zlen.jpg?v=" + new Date().getTime();
+      }
+      else if(column.property==="XS")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/XS.jpg?v=" + new Date().getTime();
+      }
+      else if(column.property==="YS")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/YS.jpg?v=" + new Date().getTime();
+      }
+      else if(column.property==="ZS")
+      {
+        var image = document.getElementById("Img");
+        image.src = "../../public/15972129987/graph/ZS.jpg?v=" + new Date().getTime();
+      }
+    },
     handleclick()
     {
       this.loadone=true,
@@ -137,6 +178,9 @@ export default{
           console.log(this.tableData)
           this.loadone=false
           this.certin=!this.certin
+          this.isshowed = true
+          var image = document.getElementById("Img");
+          image.src = "../../public/15972129987/graph/v.jpg?v=" + new Date().getTime();
         })
     },
     editCurrentApplicationApproval(row){
@@ -162,6 +206,9 @@ export default{
             this.loadtwo=false
             this.tableData= responce.data
             this.certin=!this.certin
+            this.isshowed = true
+            var image = document.getElementById("Img");
+            image.src = "../../public/15972129987/graph/v.jpg?v=" + new Date().getTime();
           });
     },
   }
@@ -204,6 +251,16 @@ export default{
 
 
 .box-card {
-  width: 1200px;
+  position: fixed;
+  top:40%;
+  right: 1%;
+  width: 350px;
+}
+.pic1{
+  position: fixed;;
+  top: 2%;
+  right: 1%;
+  width: 350px;
+  height: 350px;
 }
 </style>

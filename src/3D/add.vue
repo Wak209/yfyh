@@ -1,12 +1,12 @@
 <template>
     <el-upload
-            class="buttonn"
+            class="buttonnn"
             :on-change="handleChange"
             multiple
             :auto-upload="false"
             :limit="1"
         >
-            <el-button type="primary">选择文件</el-button>
+            <el-button type="primary" class="finn">选择文件</el-button>
         </el-upload>
 </template>
 
@@ -56,3 +56,9 @@ export default{
     }
 }
 </script>
+
+<style scoped>
+.finn{
+    transform: translate(15vw,-3vh);
+}
+</style>

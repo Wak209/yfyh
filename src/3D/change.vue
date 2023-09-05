@@ -65,7 +65,7 @@ function handleClick(){
 
 </script>
 
-<style>
+<style scoped>
 .last{
     transform: translate(33vw,0);
 }

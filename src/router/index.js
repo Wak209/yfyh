@@ -4,25 +4,29 @@ import { createRouter, createWebHashHistory } from "vue-router";
 const routes = [
   {
     path: "/",
-    name: "main",
-    component: () => import("../pages/introduction.vue"),
+    name: "login",
+    component: () => import("../pages/login.vue"),
   },
   {
-    path: "/two",
-    name: "two",
-    component: () => import("../pages/2D.vue"),
+    path: "/before",
+    name: "before",
+    component: () => import("../pages/before.vue"),
   },
   {
-    path: "/three",
-    name: "three",
-    component: () => import("../pages/3D.vue"),
+    path: "/after",
+    name: "after",
+    component: () => import("../pages/after.vue"),
   },
   {
-    path: "/others",
-    name: "others",
-    component: () => import("../pages/others.vue"),
+    path: "/pragh",
+    name: "pragh",
+    component: () => import("../pages/pragh.vue"),
   },
-  
+  {
+    path: "/user",
+    name: "user",
+    component: () => import("../pages/user.vue"),
+  },
 ];
 
 

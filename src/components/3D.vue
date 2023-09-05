@@ -93,7 +93,7 @@
 import { onMounted, ref } from "vue";
 import { UploadFilled } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
-import { useTool, useAside } from "../store/index";
+import { useTool,} from "../store/index";
 import  NaV  from "./Home.vue";
 import  Menu  from "./Nav.vue";
 import  ViewThreed from"../3D/view3D.vue"
@@ -111,8 +111,6 @@ const nv = new Niivue()
 
 const router = useRouter();
 const Tool = useTool();
-const Aside = useAside();
-const { handlePreView } = Aside;
 const { getVolumesFile, AddVolumesFile, RemoveVolumesFile } = Tool;
 const activeIndex2 = ref('1')
 

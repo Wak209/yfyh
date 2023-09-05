@@ -1,29 +1,4 @@
 <template>
-  <!--el-button
-      class="button11"
-      type="primary"
-      @click="HandleSubmit()"
-      style="    display: flex; justify-content: center;"
-      round
-      >
-      确认上传
-      </el-button-->
-
-  <p><span  style="font-size:xx-large;  font-weight:bold; color: cornflowerblue;"  id ="two" class="section">2.预测</span></p>
-  <br><br>
-  <div class = "con">
-  <!--el-switch
-    v-model="value1"
-    class="switch1"
-    @change="switchChange"
-    active-text="高精度"
-    inactive-text="正常"/-->
-  <el-tooltip content="预计5-7分钟" placement="bottom" effect="light">
-      <el-button class="button2" type="primary"  :loading="ConfirmLoading" @click ="HandleSubmit()" round>预测</el-button>
-  </el-tooltip>
-  <!--el-tooltip content="采用5个模型融合预测，预计20-30分钟" placement="bottom" effect="light">
-      <el-button  color="#626aef"  class="button3" type="primary"  :loading="ConfirmLoadinghigh" @click ="ConfirmHigh" round >高精度预测</el-button>
-  </el-tooltip--></div>
 <div class="content">
 <div class="Canv">
 <canvas id="nv"></canvas>
@@ -52,9 +27,12 @@ const LabelList={" 0   ":"背景"," 1   ":"脾脏"," 2   ":"右肾"," 3   ":"左
 const Labellist={0:"背景",1:"脾脏",2:"右肾",3:"左肾",4:"胆囊"
 ,5:"食管",6:"肝脏",7:"胃",8:"主动脉",9:"下腔静脉"
 ,10:"胰腺",11:"右肾上腺",12:"左肾上腺",13:"十二指肠",14:"膀胱",15:"前列腺/子宫"};
-
+//NEW_NAME=['背景','脾脏','右肾','左肾','胆囊','食管','肝脏','胃','主动脉','下腔静脉','胰腺','膀胱']
+const listlabel={" 0   ":"背景"," 1   ":"脾脏"," 2   ":"右肾"," 3   ":"左肾"," 4   ":"胆囊"
+," 5   ":"食管"," 6   ":"肝脏"," 7   ":"胃"," 8   ":"主动脉"," 9   ":"下腔静脉"
+," 10   ":"胰腺"," 11   ":"膀胱"};
 var  ConfirmLoading = ref(false)
-//var volumes = reactive({ url: "/basic/after.nii.gz" });
+//var volumes = reactive({ url: "/15972129987/after/result.nii.gz" });
 var volumes = reactive(1);
 // use Store
 const Tool = useTool();
@@ -88,7 +66,7 @@ function HandleSubmit(){
     if( responce.data ==='upload successfully')
     console.log(responce)
     console.log(ConfirmLoading)
-    this.volumes=reactive({ url: "/result.nii.gz" });
+    this.volumes=reactive({ url: "/15972129987/after/1111.nii.gz" });
     Attach();
   })
 };
@@ -107,13 +85,13 @@ Attach();
 
 <style lang="less" scoped>
 .content {
-  z-index: 1;
+  z-index: 3;
   height: 80vh;
   width: 90vw;
   clear: both;
   .Canv {
-  width: 80%;
-  height: 80%; 
+  width: 100%;
+  height: 100%; 
   }
 .port {
   width: 50%;
@@ -138,8 +116,7 @@ Attach();
 transform: translate(38vw,0);
 }
 .con{ 
-height: 5vh;
-width: 80vw;
+
 .button2{
 transform: translate(39vw,0vh);
 }

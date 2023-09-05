@@ -144,7 +144,30 @@ def getp(ORname,V,xlen,ylen,zlen):
     elif ORname == '前列腺/子宫':
         ruler=57452.05128205128
         return  ((1-(ruler-V)*(1-P)/(ruler-6642)) if V<ruler else (169473-V)*(1-P)/(169473-ruler)+P)
-    
+MaxArea=0
+flag = 0
+def erfen(id,min,max):
+    mid = int(min+max)/2
+    if mid == min or mid ==max:
+        flag = 1
+        return MaxArea
+    elif flag == 0:
+        MaxArea=getArea(id,mid)
+        erfen(mid,max)
+        erfen(min,mid)
+
+def getArea(id,xyz):
+
+    area = np.unique(label_array[int(xyz),:, :], return_counts=True)
+    index= np.where(area[0]==id)
+    if len(index[0]) !=0:
+        area=area[1][index][0]
+    else:
+        area=0
+    if area > MaxArea:
+        return area
+    else :
+        return MaxArea
 
 def getarea(id,x,y,z):
     #print(int(x))

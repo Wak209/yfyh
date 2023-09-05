@@ -1,12 +1,12 @@
 import paramiko  # 用于调用scp命令
 from scp import SCPClient
 import time 
- 
+import os
 # 将指定目录的图片文件上传到服务器指定目录
 # remote_path远程服务器目录
 # file_path本地文件夹路径
 # img_name是file_path本地文件夹路径下面的文件名称
-def upload_img(img_name, remote_path="./autodl-tmp/upload", file_path=r"C:\\Users\86159\Desktop\vuenii\public"):
+def upload_img(img_name, remote_path="./autodl-tmp/upload", file_path=r"C:\\Users\86159\Desktop\vuenii\public\15972129987\before\\"):
     # img_name示例：07670ff76fc14ab496b0dd411a33ac95-6.webp
     host = "222.187.226.110"  #服务器ip地址
     port = 46951  # 端口号
@@ -30,7 +30,7 @@ def upload_img(img_name, remote_path="./autodl-tmp/upload", file_path=r"C:\\User
         return True
 
 
-def download_img(img_name, remote_path="./submit-download/", file_path=r"C:\\Users\86159\Desktop\vuenii\public"):
+def download_img(img_name, remote_path="./submit-download/", file_path=r"C:\\Users\86159\Desktop\vuenii\public\15972129987\after\\"):
     # img_name示例：07670ff76fc14ab496b0dd411a33ac95-6.webp
     host = "222.187.226.110"  #服务器ip地址
     port = 46951  # 端口号
@@ -43,7 +43,6 @@ def download_img(img_name, remote_path="./submit-download/", file_path=r"C:\\Use
     scpclient = SCPClient(ssh_client.get_transport(),socket_timeout=15.0)
     local_path = file_path 
     remote_path = remote_path  + img_name
-    
     try:
         scpclient.get(remote_path, local_path)
     except :
@@ -54,6 +53,11 @@ def download_img(img_name, remote_path="./submit-download/", file_path=r"C:\\Use
         print("文件下载成功")
         time.sleep(20)
         scpclient.get(remote_path, local_path)
+        if not os.path.exists("C:\\Users\\86159\\Desktop\\vuenii\\public\\15972129987\\after\\result.nii.gz"):
+            os.rename("C:\\Users\\86159\\Desktop\\vuenii\\public\\15972129987\\after\\1111.nii.gz","C:\\Users\\86159\\Desktop\\vuenii\\public\\15972129987\\after\\result.nii.gz")
+        else:
+            os.remove("C:\\Users\\86159\\Desktop\\vuenii\\public\\15972129987\\after\\result.nii.gz")
+            os.rename("C:\\Users\\86159\\Desktop\\vuenii\\public\\15972129987\\after\\1111.nii.gz","C:\\Users\\86159\\Desktop\\vuenii\\public\\15972129987\\after\\result.nii.gz")
         ssh_client.close()
         return True
 
@@ -61,7 +65,7 @@ def download_img(img_name, remote_path="./submit-download/", file_path=r"C:\\Use
 def getanswer():
     flag=0
     while(flag == 0):
-        flag = download_img('result.nii.gz')
+        flag = download_img('1111.nii.gz')
         time.sleep(10)
 
 '''if __name__ == "__main__":
